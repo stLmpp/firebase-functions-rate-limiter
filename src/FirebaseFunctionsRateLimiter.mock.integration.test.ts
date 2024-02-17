@@ -1,8 +1,7 @@
 /* tslint:disable:max-classes-per-file no-console */
 import * as firebase from "@firebase/testing";
-import * as _ from "lodash";
 import "mocha";
-import { v4 as uuid } from "uuid";
+import { randomUUID as uuid } from "node:crypto";
 
 import { FirebaseFunctionsRateLimiter } from "./FirebaseFunctionsRateLimiter";
 import { FirebaseFunctionsRateLimiterConfiguration } from "./FirebaseFunctionsRateLimiterConfiguration";

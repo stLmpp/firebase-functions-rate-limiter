@@ -1,11 +1,11 @@
 {
-    "name": "firebase-functions-rate-limiter",
-    "version": "0.0.0-development",
+    "name": "@st-api/firebase-functions-rate-limiter",
+    "version": "1.0.0",
     "description": "JS/TS library that allows you to set per - time, per - user or per - anything limits for calling Firebase cloud functions",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "engines": {
-        "node": ">=16"
+        "node": ">=20"
     },
     "files": [
         "/dist",
@@ -15,8 +15,7 @@
         "build:cleanbefore": "rm -rf dist",
         "build:lint": "tslint -c tslint.json -p tsconfig.lint.json",
         "build:node": "tsc",
-        "build": "npm run build:cleanbefore && npm run build:node && npm run build:lint",
-        "prepare": "NODE_ENV=production npm run build",
+        "build": "npm run build:cleanbefore && npm run build:node",
         "test": "find src -name '*.spec.test.ts' | TS_NODE_FILES=true TS_NODE_CACHE=false TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' xargs mocha -r ts-node/register --require source-map-support/register",
         "do_verify": "find src -name '*.integration.test.ts' | TS_NODE_FILES=true TS_NODE_CACHE=false TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' xargs mocha -r ts-node/register --require source-map-support/register",
         "verify": "bash scripts/run-integration-tests-with-firebase-emulator.sh",
@@ -29,32 +28,30 @@
         "semantic-release": "semantic-release"
     },
     "dependencies": {
-        "firebase-admin": "^10.3.0",
-        "firebase-functions": "^3.21.2",
-        "ow": "^0.28.1"
+        "ow": "^0.28.2"
     },
     "devDependencies": {
         "@firebase/testing": "^0.20.11",
         "@types/chai": "^4.3.1",
         "@types/chai-as-promised": "^7.1.5",
         "@types/lodash": "^4.14.182",
-        "@types/mocha": "^9.1.1",
-        "@types/node": "^17.0.42",
-        "@types/sinon": "^10.0.11",
-        "@types/uuid": "^8.3.4",
-        "chai": "^4.3.6",
+        "@types/mocha": "^10.0.6",
+        "@types/node": "^20.11.19",
+        "@types/sinon": "^17.0.3",
+        "chai": "^4.4.1",
         "chai-as-promised": "^7.1.1",
         "codecov": "^3.8.3",
+        "firebase-admin": "^12.0.0",
+        "firebase-functions": "^4.7.0",
         "istanbul": "^0.4.5",
         "lodash": "^4.17.21",
         "mocha": "^10.0.0",
         "nyc": "^15.1.0",
-        "semantic-release": "^17.4.7",
-        "sinon": "^14.0.0",
+        "semantic-release": "^23.0.2",
+        "sinon": "^17.0.1",
         "ts-node": "^10.8.1",
         "tslint": "^6.1.3",
-        "typescript": "^4.7.3",
-        "uuid": "^8.3.2"
+        "typescript": "^5.3.3"
     },
     "nyc": {
         "extension": [
@@ -74,21 +71,15 @@
         "all": true
     },
     "release": {},
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/Jblew/firebase-functions-rate-limiter"
-    },
     "keywords": [
         "firebase",
         "firebase-functions",
         "rate-limiter"
     ],
-    "author": "Jędrzej Lewandowski <jedrzejblew@gmail.com> (https://jedrzej.lewandowski.doctor/)",
-    "contributors": [
-        "Jędrzej Lewandowski <jedrzejblew@gmail.com> (https://jedrzej.lewandowski.doctor/)"
-    ],
+    "author": "stLmpp",
     "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/Jblew/firebase-functions-rate-limiter/issues"
+    "peerDependencies": {
+        "firebase-admin": "^12.0.0",
+        "firebase-functions": "^4.7.0"
     }
 }
