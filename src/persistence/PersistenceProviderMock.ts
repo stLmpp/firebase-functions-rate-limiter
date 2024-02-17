@@ -1,5 +1,5 @@
-import { PersistenceProvider } from "./PersistenceProvider";
-import { PersistenceRecord } from "./PersistenceRecord";
+import { PersistenceProvider } from "./PersistenceProvider.js";
+import { PersistenceRecord } from "./PersistenceRecord.js";
 
 export class PersistenceProviderMock implements PersistenceProvider {
     public persistenceObject: { [x: string]: PersistenceRecord } = {};

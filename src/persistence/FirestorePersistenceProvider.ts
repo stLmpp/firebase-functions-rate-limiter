@@ -1,10 +1,10 @@
 import * as admin from "firebase-admin";
-import ow from "ow";
 
-import { FirestoreEquivalent } from "../types/FirestoreEquivalent";
+import { anyObject } from "../schemas.js";
+import { FirestoreEquivalent } from "../types/FirestoreEquivalent.js";
 
-import { PersistenceProvider } from "./PersistenceProvider";
-import { PersistenceRecord } from "./PersistenceRecord";
+import { PersistenceProvider } from "./PersistenceProvider.js";
+import { PersistenceRecord } from "./PersistenceRecord.js";
 
 export class FirestorePersistenceProvider implements PersistenceProvider {
     private firestore: admin.firestore.Firestore | FirestoreEquivalent;
@@ -18,7 +18,7 @@ export class FirestorePersistenceProvider implements PersistenceProvider {
         },
     ) {
         this.firestore = firestore;
-        ow(this.firestore, "firestore", ow.object);
+        anyObject.parse(this.firestore);
 
         this.debugFn = debugFn;
     }

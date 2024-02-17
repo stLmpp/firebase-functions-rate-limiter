@@ -1,9 +1,7 @@
 import * as firebaseTypes from "firebase/app";
 
-import { _ } from "../_test/test_environment";
-
-import { FirestoreEquivalent } from "./FirestoreEquivalent";
-import { RealtimeDbEquivalent } from "./RealtimeDbEquivalent";
+import { FirestoreEquivalent } from "./FirestoreEquivalent.js";
+import { RealtimeDbEquivalent } from "./RealtimeDbEquivalent.js";
 
 describe("Firebase equivalents", () => {
     // tslint:disable prefer-const

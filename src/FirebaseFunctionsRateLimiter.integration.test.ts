@@ -1,5 +1,5 @@
 /* tslint:disable:max-classes-per-file no-console */
-import * as firebase from "@firebase/testing";
+import * as firebase from "@firebase/rules-unit-testing";
 import * as functions from "firebase-functions";
 
 import { FirebaseFunctionsRateLimiter } from "./FirebaseFunctionsRateLimiter";
@@ -11,19 +11,16 @@ import { expect, uuid, _ } from "./_test/test_environment";
 
 describe("FirebaseFunctionsRateLimiter", () => {
     //
-    before("startup", async function() {
+    before("startup", async function () {
         this.timeout(4000);
         const { firestore, database } = mock("firestore", {});
-        await firestore
-            .collection("a")
-            .doc("a")
-            .get();
+        await firestore.collection("a").doc("a").get();
         await database.ref("a").set({ a: "a" });
     });
 
     afterEach(async () => {
         try {
-            await Promise.all(firebase.apps().map(app => app.delete()));
+            await Promise.all(firebase.apps().map((app) => app.delete()));
         } catch (error) {
             console.warn("Warning: Error in firebase shutdown " + error);
         }
@@ -42,7 +39,7 @@ describe("FirebaseFunctionsRateLimiter", () => {
                 return undefined;
             },
         },
-    ].forEach(test =>
+    ].forEach((test) =>
         describe(test.name, () => {
             const backends = ["firestore", "realtimedb", "mock"] as const;
             backends.forEach((backend: "firestore" | "realtimedb" | "mock") =>
@@ -59,9 +56,7 @@ describe("FirebaseFunctionsRateLimiter", () => {
                             );
 
                             const record = doc as PersistenceRecord;
-                            expect(record.u)
-                                .to.be.an("array")
-                                .with.length(1);
+                            expect(record.u).to.be.an("array").with.length(1);
                         });
 
                         it("Increments counter when limit is not exceeded", async () => {
@@ -82,9 +77,7 @@ describe("FirebaseFunctionsRateLimiter", () => {
                             );
 
                             const record = doc as PersistenceRecord;
-                            expect(record.u)
-                                .to.be.an("array")
-                                .with.length(noOfTestCalls);
+                            expect(record.u).to.be.an("array").with.length(noOfTestCalls);
                         });
 
                         it("Does not increment counter when limit is exceeded", async () => {
@@ -107,12 +100,10 @@ describe("FirebaseFunctionsRateLimiter", () => {
                             );
 
                             const record = doc as PersistenceRecord;
-                            expect(record.u)
-                                .to.be.an("array")
-                                .with.length(maxCalls);
+                            expect(record.u).to.be.an("array").with.length(maxCalls);
                         });
 
-                        it("Calls older than period are removed from the database", async function() {
+                        it("Calls older than period are removed from the database", async function () {
                             this.timeout(3000);
 
                             const maxCalls = 2;
@@ -134,9 +125,7 @@ describe("FirebaseFunctionsRateLimiter", () => {
                                 qualifier || FirebaseFunctionsRateLimiter.DEFAULT_QUALIFIER,
                             );
                             const record = doc as PersistenceRecord;
-                            expect(record.u)
-                                .to.be.an("array")
-                                .with.length(1);
+                            expect(record.u).to.be.an("array").with.length(1);
                         });
                     });
 
@@ -222,7 +211,7 @@ describe("FirebaseFunctionsRateLimiter", () => {
                                 return rateLimiter.isQuotaAlreadyExceeded.bind(rateLimiter);
                             },
                         },
-                    ].forEach(testedMethod =>
+                    ].forEach((testedMethod) =>
                         describe(`#${testedMethod.name}`, () => {
                             it("Limit is exceeded if too much calls in specified period", async () => {
                                 const maxCalls = 5;
@@ -242,7 +231,7 @@ describe("FirebaseFunctionsRateLimiter", () => {
                                 expect(await method(qualifier)).to.be.equal(true);
                             });
 
-                            it("Limit is not exceeded if too much calls not in specified period", async function() {
+                            it("Limit is not exceeded if too much calls not in specified period", async function () {
                                 this.timeout(3000);
 
                                 const maxCalls = 2;

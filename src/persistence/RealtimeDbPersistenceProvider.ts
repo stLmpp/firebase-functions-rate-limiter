@@ -1,9 +1,8 @@
-import ow from "ow";
+import { anyObject } from "../schemas.js";
+import { RealtimeDbEquivalent } from "../types/RealtimeDbEquivalent.js";
 
-import { RealtimeDbEquivalent } from "../types/RealtimeDbEquivalent";
-
-import { PersistenceProvider } from "./PersistenceProvider";
-import { PersistenceRecord } from "./PersistenceRecord";
+import { PersistenceProvider } from "./PersistenceProvider.js";
+import { PersistenceRecord } from "./PersistenceRecord.js";
 
 export class RealtimeDbPersistenceProvider implements PersistenceProvider {
     private database: RealtimeDbEquivalent;
@@ -18,7 +17,7 @@ export class RealtimeDbPersistenceProvider implements PersistenceProvider {
         },
     ) {
         this.database = database;
-        ow(this.database, "database", ow.object);
+        anyObject.parse(this.database);
 
         this.debugFn = debugFn;
     }
@@ -30,7 +29,7 @@ export class RealtimeDbPersistenceProvider implements PersistenceProvider {
     ): Promise<PersistenceRecord> {
         const ref = this.getDatabaseRef(collectionName, recordName);
 
-        const response = await ref.transaction(dataToUpdate => this.wrapUpdaterFn(updaterFn)(dataToUpdate));
+        const response = await ref.transaction((dataToUpdate) => this.wrapUpdaterFn(updaterFn)(dataToUpdate));
         const { snapshot, committed } = response;
         /* istanbul ignore next because this is not testable locally */
         if (!snapshot) throw new Error("RealtimeDbPersistenceProvider: realtime db didn't respond with data");
@@ -59,12 +58,9 @@ export class RealtimeDbPersistenceProvider implements PersistenceProvider {
             this.debugFn("RealtimeDbPersistenceProvider: updateFn called with data of type" + typeof data);
             if (data === null) {
                 const emptyRecord = this.createEmptyRecord();
-                const updatedPr = updaterFn(emptyRecord);
-                return updatedPr;
-            } else {
-                const updatedPr = updaterFn(data);
-                return updatedPr;
+                return updaterFn(emptyRecord);
             }
+            return updaterFn(data);
         };
     }
 

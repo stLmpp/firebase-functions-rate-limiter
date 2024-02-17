@@ -1,17 +1,17 @@
 // tslint:disable no-console
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import ow from "ow";
 
-import { FirebaseFunctionsRateLimiterConfiguration } from "./FirebaseFunctionsRateLimiterConfiguration";
-import { GenericRateLimiter } from "./GenericRateLimiter";
-import { FirestorePersistenceProvider } from "./persistence/FirestorePersistenceProvider";
-import { PersistenceProvider } from "./persistence/PersistenceProvider";
-import { PersistenceProviderMock } from "./persistence/PersistenceProviderMock";
-import { RealtimeDbPersistenceProvider } from "./persistence/RealtimeDbPersistenceProvider";
-import { FirebaseTimestampProvider } from "./timestamp/FirebaseTimestampProvider";
-import { FirestoreEquivalent } from "./types/FirestoreEquivalent";
-import { RealtimeDbEquivalent } from "./types/RealtimeDbEquivalent";
+import { FirebaseFunctionsRateLimiterConfiguration } from "./FirebaseFunctionsRateLimiterConfiguration.js";
+import { GenericRateLimiter } from "./GenericRateLimiter.js";
+import { FirestorePersistenceProvider } from "./persistence/FirestorePersistenceProvider.js";
+import { PersistenceProvider } from "./persistence/PersistenceProvider.js";
+import { PersistenceProviderMock } from "./persistence/PersistenceProviderMock.js";
+import { RealtimeDbPersistenceProvider } from "./persistence/RealtimeDbPersistenceProvider.js";
+import { anyObject } from "./schemas.js";
+import { FirebaseTimestampProvider } from "./timestamp/FirebaseTimestampProvider.js";
+import { FirestoreEquivalent } from "./types/FirestoreEquivalent.js";
+import { RealtimeDbEquivalent } from "./types/RealtimeDbEquivalent.js";
 
 export class FirebaseFunctionsRateLimiter {
     public static DEFAULT_QUALIFIER = "default_qualifier";
@@ -65,7 +65,7 @@ export class FirebaseFunctionsRateLimiter {
             ...FirebaseFunctionsRateLimiterConfiguration.DEFAULT_CONFIGURATION,
             ...configuration,
         };
-        ow(this.configurationFull, "configuration", ow.object);
+        anyObject.parse(this.configurationFull);
         FirebaseFunctionsRateLimiterConfiguration.ConfigurationFull.validate(this.configurationFull);
 
         this.debugFn = this.constructDebugFn(this.configurationFull);

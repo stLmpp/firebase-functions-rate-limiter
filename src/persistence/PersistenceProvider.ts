@@ -1,4 +1,4 @@
-import { PersistenceRecord } from "./PersistenceRecord";
+import { PersistenceRecord } from "./PersistenceRecord.js";
 
 export interface PersistenceProvider {
     updateAndGet(

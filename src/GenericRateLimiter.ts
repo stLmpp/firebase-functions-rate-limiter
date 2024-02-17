@@ -1,9 +1,8 @@
-import ow from "ow";
-
-import { FirebaseFunctionsRateLimiterConfiguration } from "./FirebaseFunctionsRateLimiterConfiguration";
-import { PersistenceProvider } from "./persistence/PersistenceProvider";
-import { PersistenceRecord } from "./persistence/PersistenceRecord";
-import { TimestampProvider } from "./timestamp/TimestampProvider";
+import { FirebaseFunctionsRateLimiterConfiguration } from "./FirebaseFunctionsRateLimiterConfiguration.js";
+import { PersistenceProvider } from "./persistence/PersistenceProvider.js";
+import { PersistenceRecord } from "./persistence/PersistenceRecord.js";
+import { anyObject } from "./schemas.js";
+import { TimestampProvider } from "./timestamp/TimestampProvider.js";
 
 export class GenericRateLimiter {
     private configuration: FirebaseFunctionsRateLimiterConfiguration.ConfigurationFull;
@@ -20,14 +19,14 @@ export class GenericRateLimiter {
         },
     ) {
         this.configuration = { ...FirebaseFunctionsRateLimiterConfiguration.DEFAULT_CONFIGURATION, ...configuration };
-        ow(this.configuration, "configuration", ow.object);
+        anyObject.parse(this.configuration);
         FirebaseFunctionsRateLimiterConfiguration.ConfigurationFull.validate(this.configuration);
 
         this.persistenceProvider = persistenceProvider;
-        ow(this.persistenceProvider, "persistenceProvider", ow.object);
+        anyObject.parse(this.persistenceProvider);
 
         this.timestampProvider = timestampProvider;
-        ow(this.timestampProvider, "timestampProvider", ow.object);
+        anyObject.parse(this.timestampProvider);
 
         this.debugFn = debugFn;
     }
@@ -36,7 +35,7 @@ export class GenericRateLimiter {
         const resultHolder = {
             isQuotaExceeded: false,
         };
-        await this.persistenceProvider.updateAndGet(this.configuration.name, qualifier, record => {
+        await this.persistenceProvider.updateAndGet(this.configuration.name, qualifier, (record) => {
             return this.runTransactionForAnswer(record, resultHolder);
         });
 
@@ -70,10 +69,9 @@ export class GenericRateLimiter {
             recentUsages.push(timestampsSeconds.current);
         }
 
-        const newRecord: PersistenceRecord = {
+        return {
             u: recentUsages,
         };
-        return newRecord;
     }
 
     private selectRecentUsages(allUsages: number[], timestampThresholdSeconds: number): number[] {

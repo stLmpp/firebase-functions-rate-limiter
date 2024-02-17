@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 
-import { TimestampProvider } from "./TimestampProvider";
+import { TimestampProvider } from "./TimestampProvider.js";
 
 export class FirebaseTimestampProvider implements TimestampProvider {
     public getTimestampSeconds(): number {

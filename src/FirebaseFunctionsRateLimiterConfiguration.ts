@@ -1,4 +1,4 @@
-import ow from "ow";
+import { z } from "zod";
 
 export interface FirebaseFunctionsRateLimiterConfiguration {
     name?: string;
@@ -16,11 +16,15 @@ export namespace FirebaseFunctionsRateLimiterConfiguration {
     }
 
     export namespace ConfigurationFull {
+        const schema = z.object({
+            name: z.string().min(0),
+            periodSeconds: z.number().int().finite().gt(0),
+            maxCalls: z.number().int().finite().gt(0),
+            debug: z.boolean(),
+        });
+
         export function validate(o: ConfigurationFull & FirebaseFunctionsRateLimiterConfiguration) {
-            ow(o.name, "configuration.name", ow.string.nonEmpty);
-            ow(o.periodSeconds, "configuration.periodSeconds", ow.number.integer.finite.greaterThan(0));
-            ow(o.maxCalls, "configuration.maxCalls", ow.number.integer.finite.greaterThan(0));
-            ow(o.debug, "configuration.debug", ow.boolean);
+            schema.parse(o);
         }
     }
 
